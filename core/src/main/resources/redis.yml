@@ -1,0 +1,3 @@
+redis:
+  host: 你的redis服务器host
+  port: 你的redis服务器端口

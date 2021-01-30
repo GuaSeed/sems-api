@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--scan service package-->
+    <context:component-scan base-package="cool.zzy.sems.context.service"/>
+
+    <context:annotation-config/>
+
+    <bean id="yamlProperties" class="org.springframework.beans.factory.config.YamlPropertiesFactoryBean">
+        <property name="resources">
+            <list>
+                <value>classpath:jdbc.yml</value>
+                <value>classpath:redis.yml</value>
+                <value>classpath:rpc.yml</value>
+            </list>
+        </property>
+    </bean>
+
+    <context:property-placeholder properties-ref="yamlProperties"/>
+
+    <!--    <bean id="myRedisSerializer" class="cool.zzy.rpc.redis.MyRedisSerializer"/>-->
+
+    <bean id="jedisConnectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.host}"
+          p:port="${redis.port}"
+          p:use-pool="true"/>
+
+    <bean id="redisTemplate"
+          class="org.springframework.data.redis.core.RedisTemplate"
+          p:connection-factory-ref="jedisConnectionFactory"/>
+
+    <bean id="valueOperations" class="org.springframework.data.redis.core.DefaultValueOperations">
+        <constructor-arg ref="redisTemplate"/>
+    </bean>
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${datasource.driver-class-name}"/>
+        <property name="url" value="${datasource.url}"/>
+        <property name="username" value="${datasource.username}"/>
+        <property name="password" value="${datasource.password}"/>
+        <property name="initialSize" value="${druid.initialSize}"/>
+        <property name="minIdle" value="${druid.minIdle}"/>
+        <property name="maxActive" value="${druid.maxActive}"/>
+        <property name="maxWait" value="${druid.maxWait}"/>
+        <property name="timeBetweenEvictionRunsMillis" value="${druid.timeBetweenEvictionRunsMillis}"/>
+        <property name="minEvictableIdleTimeMillis" value="${druid.minEvictableIdleTimeMillis}"/>
+        <property name="validationQuery" value="${druid.validationQuery}"/>
+        <property name="testWhileIdle" value="${druid.testWhileIdle}"/>
+        <property name="testOnBorrow" value="${druid.testOnBorrow}"/>
+        <property name="testOnReturn" value="${druid.testOnReturn}"/>
+        <property name="poolPreparedStatements" value="${druid.poolPreparedStatements}"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize"
+                  value="${druid.maxPoolPreparedStatementPerConnectionSize}"/>
+        <property name="filters" value="${druid.filters}"/>
+        <property name="connectionProperties" value="${druid.connectionProperties}"/>
+        <property name="useGlobalDataSourceStat" value="${druid.useGlobalDataSourceStat}"/>
+    </bean>
+
+    <bean id="slowSqlInterceptor" class="cool.zzy.sems.core.db.plugin.SlowSqlInterceptor">
+        <property name="limitSecond" value="0"/>
+    </bean>
+
+    <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="plugins" ref="slowSqlInterceptor"/>
+    </bean>
+
+    <bean id="scannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="cool.zzy.sems.core.db.mapper"/>
+    </bean>
+
+    <bean id="rpcServer" class="cool.zzy.sems.rpc.server.RpcServer">
+        <constructor-arg name="serverAddress" value="${server.address}"/>
+    </bean>
+
+</beans>

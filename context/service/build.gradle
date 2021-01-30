@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(':context:model')
+    implementation project(':core:db')
+    implementation project(':rpc:common')
+}

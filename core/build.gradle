@@ -1,0 +1,9 @@
+dependencies {
+    implementation project(':rpc:common')
+    implementation project(':rpc:client')
+    implementation project(':rpc:server')
+    implementation project(':context:model')
+    implementation project(':context:service')
+    implementation project(':core:db')
+    implementation project(':core:util')
+}

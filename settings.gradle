@@ -1,0 +1,11 @@
+rootProject.name = 'sems-api'
+include 'core'
+include 'rpc:common'
+include 'context:model'
+include 'core:db'
+include 'core:util'
+include 'rpc:client'
+include 'rpc:server'
+include 'context:service'
+findProject(':context:service')?.name = 'service'
+
