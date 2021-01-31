@@ -6,7 +6,6 @@ import cool.zzy.sems.rpc.common.codec.RpcRequest;
 import cool.zzy.sems.rpc.common.codec.RpcResponse;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
-import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,12 +56,8 @@ public class RpcClientHandler extends SimpleChannelInboundHandler<RpcResponse> {
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        if (evt instanceof IdleStateHandler) {
-            sendRequest(Beat.BEAT_PING);
-            logger.debug("Client send beat-ping to {}", remotePeer);
-        } else {
-            super.userEventTriggered(ctx, evt);
-        }
+        sendRequest(Beat.BEAT_PING);
+        logger.debug("Client send beat-ping to {}", remotePeer);
     }
 
     public void close(ChannelFutureListener channelFutureListener) {
@@ -78,8 +73,8 @@ public class RpcClientHandler extends SimpleChannelInboundHandler<RpcResponse> {
             if (!channelFuture.isSuccess()) {
                 logger.error("Send request {} error", request.getRequestId());
             }
-        } catch (InterruptedException e) {
-            logger.error("Send request exception {}", e.getMessage());
+        } catch (Exception e) {
+            logger.error("Send request exception", e);
         }
         return rpcFuture;
     }
