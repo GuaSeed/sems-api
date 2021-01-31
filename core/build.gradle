@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
+    }
+}
+apply plugin: 'org.springframework.boot'
+
 dependencies {
     implementation project(':rpc:common')
     implementation project(':rpc:client')
@@ -10,7 +21,7 @@ dependencies {
     implementation "org.springframework:spring-context:$springVersion"
     implementation "org.mybatis:mybatis:$mybatisVersion"
     implementation "org.springframework:spring-jdbc:$springVersion"
-    implementation("org.springframework.data:spring-data-redis:$springDataRedisVersion") {
+    implementation("org.springframework.data:spring-data-redis:$springBootVersion") {
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
     // redis
@@ -23,4 +34,8 @@ dependencies {
     implementation "org.postgresql:postgresql:42.2.16"
     implementation "org.mybatis:mybatis-spring:$mybatisSpringVersion"
     implementation "com.alibaba:druid:1.1.21"
+}
+
+springBoot {
+    mainClass = 'cool.zzy.sems.core.CoreApplication'
 }

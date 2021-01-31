@@ -9,7 +9,7 @@ allprojects {
 
     ext {
         springVersion = '5.3.1'
-        springDataRedisVersion = '2.4.1'
+        springBootVersion = '2.4.1'
         mybatisVersion = '3.5.6'
         mybatisSpringVersion = '2.0.6'
         nettyVersion = '4.1.42.Final'
