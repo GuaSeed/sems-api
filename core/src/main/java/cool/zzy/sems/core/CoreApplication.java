@@ -1,6 +1,5 @@
 package cool.zzy.sems.core;
 
-import cool.zzy.sems.context.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -16,8 +15,6 @@ public class CoreApplication {
 
     public static void main(String[] args) {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("server-spring.xml");
-        UserService userService = applicationContext.getBean(UserService.class);
-        logger.info("{}", userService.getUserById(1));
-        userService.signIn(null, null);
+        logger.info("{}", GlobalConfig.getConfig());
     }
 }

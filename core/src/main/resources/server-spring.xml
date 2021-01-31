@@ -77,6 +77,9 @@
         <property name="basePackage" value="cool.zzy.sems.core.db.mapper"/>
     </bean>
 
+    <bean id="globalConfig" class="cool.zzy.sems.core.GlobalConfig">
+    </bean>
+
     <bean id="rpcServer" class="cool.zzy.sems.rpc.server.RpcServer">
         <constructor-arg name="serverAddress" value="${server.address}"/>
     </bean>

@@ -21,6 +21,16 @@ public interface UserMapper {
             @Result(property = "ukEmail", column = "uk_email"),
             @Result(property = "passwordHash", column = "password_hash"),
     })
-    @Select("select id, created, modified, uk_email, password_hash, nickname, gender, host(ip) as ip from t_user where id = #{id} and is_deleted = false")
+    @Select("select id,\n" +
+            "       created,\n" +
+            "       modified,\n" +
+            "       uk_email,\n" +
+            "       password_hash,\n" +
+            "       nickname,\n" +
+            "       gender,\n" +
+            "       host(ip) as ip\n" +
+            "from t_user\n" +
+            "where id = #{id} and is_deleted = false\n" +
+            "limit 1")
     User selectUserById(int id);
 }

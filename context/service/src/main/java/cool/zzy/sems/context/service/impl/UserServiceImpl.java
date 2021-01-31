@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User signIn(String ukEmail, String password) {
-        logger.info("{}", valueOperations.get("test"));
         return null;
     }
 

@@ -40,7 +40,7 @@ public class SlowSqlInterceptor implements Interceptor {
                 BoundSql boundSql = statementHandler.getBoundSql();
                 // 调用getFormatedSql（）方法对参数占位符进行替换
                 String sql = getFormattedSql(boundSql);
-                logger.info("SQL语句【{}】，执行耗时: {}ms", sql, costTimeMillis);
+                logger.info("SQL语句【\n{}】，执行耗时: {}ms", sql, costTimeMillis);
             }
         }
     }
@@ -60,7 +60,7 @@ public class SlowSqlInterceptor implements Interceptor {
         String sql = boundSql.getSql();
         Object parameterObject = boundSql.getParameterObject();
         List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
-        sql = beautifySql(sql);
+//        sql = beautifySql(sql);
         if (parameterObject == null || parameterMappings == null || parameterMappings.isEmpty()) {
             return sql;
         }
@@ -93,7 +93,6 @@ public class SlowSqlInterceptor implements Interceptor {
                 .replace(" )", ")")
                 .replace(" ,", ",");
         return sql;
-
     }
 
     private String handleListParameter(String sql, Collection<?> col) {
