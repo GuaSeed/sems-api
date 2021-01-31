@@ -1,3 +1,6 @@
 dependencies {
     implementation project(':rpc:common')
+    // Spring
+    implementation "org.springframework:spring-context:$springVersion"
+    implementation "io.netty:netty-all:$nettyVersion"
 }

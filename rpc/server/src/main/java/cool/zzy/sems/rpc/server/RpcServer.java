@@ -2,7 +2,6 @@ package cool.zzy.sems.rpc.server;
 
 import cool.zzy.sems.rpc.common.annotation.RpcService;
 import cool.zzy.sems.rpc.server.core.NettyServer;
-import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -34,7 +33,7 @@ public class RpcServer extends NettyServer implements ApplicationContextAware, I
     @Override
     public void setApplicationContext(ApplicationContext ctx) throws BeansException {
         Map<String, Object> serviceBeanMap = ctx.getBeansWithAnnotation(RpcService.class);
-        if (MapUtils.isNotEmpty(serviceBeanMap)) {
+        if (!serviceBeanMap.isEmpty()) {
             for (Object serviceBean : serviceBeanMap.values()) {
                 RpcService rpcService = serviceBean.getClass().getAnnotation(RpcService.class);
                 String interfaceName = rpcService.value().getName();

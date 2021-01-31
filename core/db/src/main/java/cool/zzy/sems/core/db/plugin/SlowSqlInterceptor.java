@@ -39,7 +39,7 @@ public class SlowSqlInterceptor implements Interceptor {
             if (costTimeMillis > limitSecond * 1000) {
                 BoundSql boundSql = statementHandler.getBoundSql();
                 // 调用getFormatedSql（）方法对参数占位符进行替换
-                String sql = getFormatedSql(boundSql);
+                String sql = getFormattedSql(boundSql);
                 logger.info("SQL语句【{}】，执行耗时: {}ms", sql, costTimeMillis);
             }
         }
@@ -56,7 +56,7 @@ public class SlowSqlInterceptor implements Interceptor {
         this.limitSecond = Integer.parseInt(limitSecond);
     }
 
-    private String getFormatedSql(BoundSql boundSql) {
+    private String getFormattedSql(BoundSql boundSql) {
         String sql = boundSql.getSql();
         Object parameterObject = boundSql.getParameterObject();
         List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
@@ -66,19 +66,17 @@ public class SlowSqlInterceptor implements Interceptor {
         }
         String sqlWithoutReplacePlaceholder = sql;
         try {
-            if (parameterMappings != null) {
-                Class<?> parameterObjectClass = parameterObject.getClass();
-                if (isStrictMap(parameterObjectClass)) {
-                    DefaultSqlSession.StrictMap<Collection<?>> strictMap = (DefaultSqlSession.StrictMap<Collection<?>>) parameterObject;
-                    if (isList(strictMap.get("list").getClass())) {
-                        sql = handleListParameter(sql, strictMap.get("list"));
-                    }
-                } else if (isMap(parameterObjectClass)) {
-                    Map<?, ?> paramMap = (Map<?, ?>) parameterObject;
-                    sql = handleMapParameter(sql, paramMap, parameterMappings);
-                } else {
-                    sql = handleCommonParameter(sql, parameterMappings, parameterObjectClass, parameterObject);
+            Class<?> parameterObjectClass = parameterObject.getClass();
+            if (isStrictMap(parameterObjectClass)) {
+                DefaultSqlSession.StrictMap<Collection<?>> strictMap = (DefaultSqlSession.StrictMap<Collection<?>>) parameterObject;
+                if (isList(strictMap.get("list").getClass())) {
+                    sql = handleListParameter(sql, strictMap.get("list"));
                 }
+            } else if (isMap(parameterObjectClass)) {
+                Map<?, ?> paramMap = (Map<?, ?>) parameterObject;
+                sql = handleMapParameter(sql, paramMap, parameterMappings);
+            } else {
+                sql = handleCommonParameter(sql, parameterMappings, parameterObjectClass, parameterObject);
             }
         } catch (Exception e) {
             return sqlWithoutReplacePlaceholder;
