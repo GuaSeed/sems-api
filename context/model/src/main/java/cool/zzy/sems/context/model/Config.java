@@ -14,7 +14,6 @@ public class Config implements Serializable {
     private static final long serialVersionUID = 6885511379065530377L;
     private Long created;
     private Long modified;
-    private String passwordSalt;
     private Integer passwordHashCount;
     private Boolean delete;
 }

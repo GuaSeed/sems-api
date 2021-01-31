@@ -23,7 +23,6 @@ public interface ConfigMapper {
     @Select("select id,\n" +
             "       extract(epoch from created)  as created,\n" +
             "       extract(epoch from modified) as modified,\n" +
-            "       password_salt,\n" +
             "       password_hash_count\n" +
             "from t_config\n" +
             "where is_deleted = false\n" +
