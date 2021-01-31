@@ -2,7 +2,7 @@ package cool.zzy.sems.context.model;
 
 import lombok.Data;
 
-import java.time.OffsetDateTime;
+import java.io.Serializable;
 
 /**
  * @author intent zzy.main@gmail.com
@@ -10,9 +10,10 @@ import java.time.OffsetDateTime;
  * @since 1.0
  */
 @Data
-public class Config {
-    private OffsetDateTime created;
-    private OffsetDateTime modified;
+public class Config implements Serializable {
+    private static final long serialVersionUID = 6885511379065530377L;
+    private Long created;
+    private Long modified;
     private String passwordSalt;
     private Integer passwordHashCount;
     private Boolean delete;

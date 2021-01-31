@@ -21,8 +21,8 @@ public interface ConfigMapper {
             @Result(property = "passwordHashCount", column = "password_hash_count"),
     })
     @Select("select id,\n" +
-            "       created,\n" +
-            "       modified,\n" +
+            "       extract(epoch from created)  as created,\n" +
+            "       extract(epoch from modified) as modified,\n" +
             "       password_salt,\n" +
             "       password_hash_count\n" +
             "from t_config\n" +
