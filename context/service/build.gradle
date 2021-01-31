@@ -2,5 +2,7 @@ dependencies {
     implementation project(':context:model')
     implementation project(':core:db')
     implementation project(':rpc:common')
-    implementation "org.springframework.data:spring-data-redis:$springDataRedisVersion"
+    implementation("org.springframework.data:spring-data-redis:$springDataRedisVersion") {
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
 }
