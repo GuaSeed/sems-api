@@ -96,4 +96,21 @@ public class HashUtils {
         }
         return new String(passwordHash).equals(md5(password + new String(salt), hashCount));
     }
+
+    /**
+     * 去除掉md5中的随机盐
+     *
+     * @param md5 md5
+     * @return passwordHash
+     */
+    public static String removeSalt(String md5) {
+        if (StringUtils.isBlank(md5) || md5.length() != PASSWORD_HASH_LENGTH + SALT_LENGTH) {
+            return md5;
+        }
+        char[] passwordHash = new char[PASSWORD_HASH_LENGTH];
+        for (int i = 0; i < PASSWORD_HASH_LENGTH + SALT_LENGTH; i += 2) {
+            passwordHash[i / 2] = md5.charAt(i);
+        }
+        return new String(passwordHash);
+    }
 }

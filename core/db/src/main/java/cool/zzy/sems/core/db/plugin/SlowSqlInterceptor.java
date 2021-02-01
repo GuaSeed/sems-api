@@ -82,7 +82,6 @@ public class SlowSqlInterceptor implements Interceptor {
             return sqlWithoutReplacePlaceholder;
         }
         return sql;
-
     }
 
     private String beautifySql(String sql) {
@@ -135,6 +134,8 @@ public class SlowSqlInterceptor implements Interceptor {
             String propertyValue = null;
             if (isPrimitiveOrPrimitiveWrapper(parameterObjectClass)) {
                 propertyValue = parameterObject.toString();
+            } else if (parameterObjectClass == String.class) {
+                propertyValue = parameterObject.toString();
             } else {
                 String propertyName = parameterMapping.getProperty();
                 Field field = parameterObjectClass.getDeclaredField(propertyName);
@@ -147,7 +148,6 @@ public class SlowSqlInterceptor implements Interceptor {
             sql = sql.replaceFirst("\\?", propertyValue);
         }
         return sql;
-
     }
 
     private boolean isPrimitiveOrPrimitiveWrapper(Class<?> parameterObjectClass) {

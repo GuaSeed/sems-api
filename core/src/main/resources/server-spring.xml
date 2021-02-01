@@ -37,10 +37,6 @@
           class="org.springframework.data.redis.core.RedisTemplate"
           p:connection-factory-ref="jedisConnectionFactory"/>
 
-    <bean id="valueOperations" class="org.springframework.data.redis.core.DefaultValueOperations">
-        <constructor-arg ref="redisTemplate"/>
-    </bean>
-
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
         <property name="driverClassName" value="${datasource.driver-class-name}"/>
         <property name="url" value="${datasource.url}"/>
@@ -77,7 +73,8 @@
         <property name="basePackage" value="cool.zzy.sems.core.db.mapper"/>
     </bean>
 
-    <bean id="globalConfig" class="cool.zzy.sems.core.GlobalConfig">
+    <bean id="globalConfig" class="cool.zzy.sems.core.db.config.GlobalConfig">
+        <constructor-arg ref="configMapper"/>
     </bean>
 
     <bean id="rpcServer" class="cool.zzy.sems.rpc.server.RpcServer">

@@ -15,5 +15,7 @@ public class Config implements Serializable {
     private Long created;
     private Long modified;
     private Integer passwordHashCount;
+    private String redisSignInUserPrefix;
+    private Integer redisSignInUserExpire;
     private Boolean delete;
 }

@@ -17,13 +17,16 @@ public interface ConfigMapper {
      * @return {@link Config}
      */
     @Results({
-            @Result(property = "passwordSalt", column = "password_salt"),
             @Result(property = "passwordHashCount", column = "password_hash_count"),
+            @Result(property = "redisSignInUserPrefix", column = "redis_sign_in_user_prefix"),
+            @Result(property = "redisSignInUserExpire", column = "redis_sign_in_user_expire"),
     })
     @Select("select id,\n" +
             "       extract(epoch from created)  as created,\n" +
             "       extract(epoch from modified) as modified,\n" +
-            "       password_hash_count\n" +
+            "       password_hash_count,\n" +
+            "       redis_sign_in_user_prefix,\n" +
+            "       redis_sign_in_user_expire\n" +
             "from t_config\n" +
             "where is_deleted = false\n" +
             "order by created desc\n" +

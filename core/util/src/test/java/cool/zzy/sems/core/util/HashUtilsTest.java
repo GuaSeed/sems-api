@@ -31,4 +31,14 @@ class HashUtilsTest {
         Assertions.assertTrue(HashUtils.verify("123456",
                 "8a7w1j4bbgfeep4mdofk8i7e6a0q7edu2abqduckfndt4qfi5mdy4ien6q8q2cfc", 2));
     }
+
+    @Test
+    void md5() {
+    }
+
+    @Test
+    void removeSalt() {
+        Assertions.assertEquals("8714bfe4df87607d2bdcfd4f5d4e682f",
+                HashUtils.removeSalt("8a7w1j4bbgfeep4mdofk8i7e6a0q7edu2abqduckfndt4qfi5mdy4ien6q8q2cfc"));
+    }
 }

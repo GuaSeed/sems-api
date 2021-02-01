@@ -1,5 +1,6 @@
 package cool.zzy.sems.core;
 
+import cool.zzy.sems.core.db.config.GlobalConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -15,6 +16,7 @@ public class CoreApplication {
 
     public static void main(String[] args) {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("server-spring.xml");
-        logger.info("{}", GlobalConfig.getConfig());
+        GlobalConfig globalConfig = applicationContext.getBean(GlobalConfig.class);
+        logger.info("{}", globalConfig.getConfig());
     }
 }

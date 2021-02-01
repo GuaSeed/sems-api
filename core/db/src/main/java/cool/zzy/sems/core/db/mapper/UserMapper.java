@@ -30,8 +30,33 @@ public interface UserMapper {
             "       gender,\n" +
             "       host(ip)                     as ip\n" +
             "from t_user\n" +
-            "where id = 1\n" +
+            "where id = #{id}\n" +
             "  and is_deleted = false\n" +
             "limit 1")
     User selectUserById(int id);
+
+
+    /**
+     * 根据email获取获取
+     *
+     * @param email 邮箱
+     * @return {@link User}
+     */
+    @Results({
+            @Result(property = "ukEmail", column = "uk_email"),
+            @Result(property = "passwordHash", column = "password_hash"),
+    })
+    @Select("select id,\n" +
+            "       extract(epoch from created)  as created,\n" +
+            "       extract(epoch from modified) as modified,\n" +
+            "       uk_email,\n" +
+            "       password_hash,\n" +
+            "       nickname,\n" +
+            "       gender,\n" +
+            "       host(ip)                     as ip\n" +
+            "from t_user\n" +
+            "where uk_email = #{email}\n" +
+            "  and is_deleted = false\n" +
+            "limit 1")
+    User selectUserByEmail(String email);
 }
