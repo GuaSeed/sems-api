@@ -1,10 +1,13 @@
 package cool.zzy.sems.context.service;
 
+import cool.zzy.sems.context.model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.*;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 /**
  * @author intent zzy.main@gmail.com
@@ -14,6 +17,7 @@ import org.springframework.test.context.junit.jupiter.*;
 @SpringJUnitConfig
 @ContextConfiguration(locations = "classpath:service-test.xml")
 class UserServiceTest {
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceTest.class);
 
     @Autowired
     private UserService userService;
@@ -25,5 +29,14 @@ class UserServiceTest {
 
     @Test
     void register() {
+        User user = new User();
+        user.setUkEmail("142865830@qq.com");
+        user.setPasswordHash("111111");
+        user.setIp("127.0.0.1");
+        try {
+            logger.info("{}", userService.register(user));
+        } catch (Exception e) {
+            logger.error("{}", e.getMessage());
+        }
     }
 }

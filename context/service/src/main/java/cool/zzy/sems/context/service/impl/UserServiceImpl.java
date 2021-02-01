@@ -6,6 +6,7 @@ import cool.zzy.sems.core.db.config.GlobalConfig;
 import cool.zzy.sems.core.db.mapper.UserMapper;
 import cool.zzy.sems.core.util.HashUtils;
 import cool.zzy.sems.rpc.common.annotation.RpcService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,7 @@ public class UserServiceImpl implements UserService {
         if (HashUtils.verify(password, user.getPasswordHash(), globalConfig.getPasswordHashCount())) {
             // 去除密码中的随机盐
             user.setPasswordHash(HashUtils.removeSalt(user.getPasswordHash()));
+            // 缓存到redis
             redisTemplate.opsForValue().set(globalConfig.getRedisSignInUserPrefix() + user.getUkEmail(), user,
                     globalConfig.getRedisSignInUserExpire(), TimeUnit.SECONDS);
             return user;
@@ -63,7 +65,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(User user) {
+    public User register(User user) throws Exception {
+        if (StringUtils.isBlank(user.getUkEmail())
+                || StringUtils.isBlank(user.getPasswordHash())) {
+            throw new Exception("Email or password can not null.");
+        }
+        // 将明文的密码md5后存储
+        user.setPasswordHash(HashUtils.generate(user.getPasswordHash(),
+                HashUtils.randomSalt(), globalConfig.getPasswordHashCount()));
+        user.setCreated(System.currentTimeMillis() / TimeUnit.SECONDS.toMillis(1));
+        if (StringUtils.isBlank(user.getNickname())) {
+            user.setNickname(user.getUkEmail());
+        }
+        if (user.getGender() == null) {
+            user.setGender(true);
+        }
+        try {
+            int flag = userMapper.insertUser(user);
+            logger.info("flag: {}", flag);
+            if (flag > 0) {
+                // 已经注册好用户，去除密码中的随机盐
+                user.setPasswordHash(HashUtils.removeSalt(user.getPasswordHash()));
+                // 缓存到redis
+                redisTemplate.opsForValue().set(globalConfig.getRedisSignInUserPrefix() + user.getUkEmail(), user,
+                        globalConfig.getRedisSignInUserExpire(), TimeUnit.SECONDS);
+                return user;
+            }
+        } catch (Exception e) {
+            throw new Exception("Email " + user.getUkEmail() + " already exists.");
+        }
         return null;
     }
 }

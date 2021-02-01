@@ -30,7 +30,7 @@ dependencies {
     // yaml
     implementation "org.yaml:snakeyaml:1.27"
     // db
-    implementation "org.postgresql:postgresql:42.2.16"
+    implementation "org.postgresql:postgresql:$postgreSQLDriverVersion"
     implementation "org.mybatis:mybatis:$mybatisVersion"
     implementation "org.mybatis:mybatis-spring:$mybatisSpringVersion"
     implementation "com.alibaba:druid:1.1.21"

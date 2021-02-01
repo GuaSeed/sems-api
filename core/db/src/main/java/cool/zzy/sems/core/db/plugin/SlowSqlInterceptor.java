@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Statement;
 import java.util.Collection;
 import java.util.List;
@@ -28,7 +27,7 @@ public class SlowSqlInterceptor implements Interceptor {
     private Integer limitSecond;
 
     @Override
-    public Object intercept(Invocation invocation) throws InvocationTargetException, IllegalAccessException {
+    public Object intercept(Invocation invocation) throws Exception {
         long beginTimeMillis = System.currentTimeMillis();
         StatementHandler statementHandler = (StatementHandler) invocation.getTarget();
         try {

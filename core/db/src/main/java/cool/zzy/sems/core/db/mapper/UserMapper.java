@@ -1,6 +1,7 @@
 package cool.zzy.sems.core.db.mapper;
 
 import cool.zzy.sems.context.model.User;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
@@ -59,4 +60,15 @@ public interface UserMapper {
             "  and is_deleted = false\n" +
             "limit 1")
     User selectUserByEmail(String email);
+
+    /**
+     * 插入一条记录到用户表
+     *
+     * @param user 用户信息
+     * @return 插入成功记录条数
+     * @throws Exception 插入用户重复抛出异常
+     */
+    @Insert("insert into t_user(created, uk_email, password_hash, nickname, gender, ip)\n" +
+            "values (to_timestamp(#{created}), #{ukEmail}, #{passwordHash}, #{nickname}, #{gender}, #{ip}::inet)")
+    int insertUser(User user) throws Exception;
 }

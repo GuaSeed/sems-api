@@ -63,6 +63,9 @@ public class ObjectProxy<T> implements InvocationHandler {
 //        String serviceKey = ServiceUtils.generateKey(method.getDeclaringClass().getName(), version);
         RpcClientHandler handler = ConnectionManager.getInstance().getHandler();
         RpcFuture future = handler.sendRequest(request);
+        if (future.get() instanceof Exception){
+            throw (Exception) future.get();
+        }
         return future.get();
     }
 }

@@ -35,7 +35,7 @@ public class RpcServerHandler extends SimpleChannelInboundHandler<RpcRequest> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcRequest rpcRequest) throws Exception {
         if (Beat.BEAT_ID.equalsIgnoreCase(rpcRequest.getRequestId())) {
-            logger.info("Server read heartbeat ping");
+            logger.info("Server read heartbeat ping {}", ctx.channel().remoteAddress());
             return;
         }
 
@@ -47,8 +47,12 @@ public class RpcServerHandler extends SimpleChannelInboundHandler<RpcRequest> {
                 Object result = handle(rpcRequest);
                 rpcResponse.setResult(result);
             } catch (Throwable t) {
-                rpcResponse.setError(t.toString());
-                logger.error("RPC Server handle request error", t);
+                Throwable throwable = t;
+                while (throwable.getMessage() == null) {
+                    throwable = t.getCause();
+                    rpcResponse.setError(throwable.getMessage());
+                }
+                logger.error("RPC Server handle request error: {}", rpcResponse.getError());
             }
             ctx.writeAndFlush(rpcResponse).addListener(new ChannelFutureListener() {
                 @Override

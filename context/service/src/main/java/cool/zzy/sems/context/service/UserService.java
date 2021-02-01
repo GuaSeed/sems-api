@@ -14,7 +14,7 @@ public interface UserService {
      * 登录
      * 根据用户的邮箱和Hash后的密码在数据库中查询用户
      *
-     * @param email  邮箱（唯一）
+     * @param email    邮箱（唯一）
      * @param password 密码（未Hash之前的原始密码）
      * @return {@link User} or null
      */
@@ -25,6 +25,7 @@ public interface UserService {
      *
      * @param user {@link User}
      * @return {@link User}
+     * @throws Exception 用户注册异常
      */
-    User register(User user);
+    User register(User user) throws Exception;
 }
