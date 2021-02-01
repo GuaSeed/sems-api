@@ -6,4 +6,15 @@ dependencies {
     implementation("org.springframework.data:spring-data-redis:$springBootVersion") {
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
+    testImplementation "org.springframework:spring-test:$springVersion"
+    testImplementation "org.springframework:spring-context:$springVersion"
+    testImplementation "org.springframework:spring-jdbc:$springVersion"
+    testImplementation "org.postgresql:postgresql:42.2.16"
+    testImplementation "org.mybatis:mybatis:$mybatisVersion"
+    testImplementation "org.mybatis:mybatis-spring:$mybatisSpringVersion"
+    testImplementation "com.alibaba:druid:1.1.21"
+    testImplementation "org.yaml:snakeyaml:1.27"
+    testImplementation("redis.clients:jedis:3.3.0") {
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
 }

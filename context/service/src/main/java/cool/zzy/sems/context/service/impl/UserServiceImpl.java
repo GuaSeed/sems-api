@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, User> redisTemplate;
 
     @Autowired
     private GlobalConfig globalConfig;
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User signIn(String email, String password) {
         // 先在redis存在是否存在
-        User user = (User) redisTemplate.opsForValue().get(globalConfig.getRedisSignInUserPrefix() + email);
+        User user = redisTemplate.opsForValue().get(globalConfig.getRedisSignInUserPrefix() + email);
         if (user != null) {
             // redis有缓存，比对md5
             // 因为如果redis有缓存，说明密码是被hash过的
