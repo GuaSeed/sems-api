@@ -1,10 +1,7 @@
 package cool.zzy.sems.core.db.mapper;
 
 import cool.zzy.sems.context.model.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 /**
  * @author intent zzy.main@gmail.com
@@ -68,6 +65,7 @@ public interface UserMapper {
      * @return 插入成功记录条数
      * @throws Exception 插入用户重复抛出异常
      */
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     @Insert("insert into t_user(created, uk_email, password_hash, nickname, gender, ip)\n" +
             "values (to_timestamp(#{created}), #{ukEmail}, #{passwordHash}, #{nickname}, #{gender}, #{ip}::inet)")
     int insertUser(User user) throws Exception;

@@ -81,9 +81,7 @@ public class UserServiceImpl implements UserService {
             user.setGender(true);
         }
         try {
-            int flag = userMapper.insertUser(user);
-            logger.info("flag: {}", flag);
-            if (flag > 0) {
+            if (userMapper.insertUser(user) > 0) {
                 // 已经注册好用户，去除密码中的随机盐
                 user.setPasswordHash(HashUtils.removeSalt(user.getPasswordHash()));
                 // 缓存到redis
