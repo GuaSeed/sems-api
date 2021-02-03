@@ -1,9 +1,9 @@
 datasource:
   type: com.alibaba.druid.pool.DruidDataSource
-  url: jdbc:postgresql://url/sems
-  username: postgres
+  url: ${DB_URL}
+  username: ${DB_USER}
   driver-class-name: org.postgresql.Driver
-  password: 密码
+  password: ${DB_PASSWORD}
 
 #-----------druid---------------
 druid:
