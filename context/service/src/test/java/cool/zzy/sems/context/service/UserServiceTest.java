@@ -39,4 +39,17 @@ class UserServiceTest {
             logger.error("{}", e.getMessage());
         }
     }
+
+    @Test
+    void updateUser() {
+        User user = new User();
+        user.setUkEmail("142865830@qq.com");
+        user.setNickname("hhhhhhhhh");
+        user = userService.updateUser(user);
+        if (user == null) {
+            logger.error("Update user fail.");
+        } else {
+            logger.info("{}", user);
+        }
+    }
 }

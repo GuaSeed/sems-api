@@ -33,6 +33,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User signIn(String email, String password) {
+        if (StringUtils.isBlank(email) || StringUtils.isBlank(password)) {
+            return null;
+        }
         // 先在redis存在是否存在
         User user = redisTemplate.opsForValue().get(globalConfig.getRedisSignInUserPrefix() + email);
         if (user != null) {
@@ -66,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(User user) throws Exception {
-        if (StringUtils.isBlank(user.getUkEmail())
+        if (user == null || StringUtils.isBlank(user.getUkEmail())
                 || StringUtils.isBlank(user.getPasswordHash())) {
             throw new Exception("Email or password can not null.");
         }
@@ -90,7 +93,35 @@ public class UserServiceImpl implements UserService {
                 return user;
             }
         } catch (Exception e) {
+            logger.error("{}", e.getMessage());
             throw new Exception("Email " + user.getUkEmail() + " already exists.");
+        }
+        return null;
+    }
+
+    @Override
+    public User updateUser(User user) {
+        if (user == null || StringUtils.isBlank(user.getUkEmail())) {
+            return null;
+        }
+        // 删除redis中的缓存
+        redisTemplate.delete(globalConfig.getRedisSignInUserPrefix() + user.getUkEmail());
+        user.setModified(System.currentTimeMillis() / TimeUnit.SECONDS.toMillis(1));
+        try {
+            if (userMapper.updateUser(user) > 0) {
+                user = userMapper.selectUserByEmail(user.getUkEmail());
+                if (user == null) {
+                    return null;
+                }
+                // 去除密码中的随机盐
+                user.setPasswordHash(HashUtils.removeSalt(user.getPasswordHash()));
+                // 缓存到redis
+                redisTemplate.opsForValue().set(globalConfig.getRedisSignInUserPrefix() + user.getUkEmail(), user,
+                        globalConfig.getRedisSignInUserExpire(), TimeUnit.SECONDS);
+                return user;
+            }
+        } catch (Exception e) {
+            logger.error("{}", e.getMessage());
         }
         return null;
     }

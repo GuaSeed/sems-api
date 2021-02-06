@@ -69,4 +69,21 @@ public interface UserMapper {
     @Insert("insert into t_user(created, uk_email, password_hash, nickname, gender, ip)\n" +
             "values (to_timestamp(#{created}), #{ukEmail}, #{passwordHash}, #{nickname}, #{gender}, #{ip}::inet)")
     int insertUser(User user) throws Exception;
+
+    /**
+     * 更新用户信息
+     *
+     * @param user 用户
+     * @return 更新是否成功
+     */
+    @Update({"<script>",
+            "update t_user",
+            "  <set>",
+            "    <if test='modified != null'>modified=to_timestamp(#{modified}),</if>",
+            "    <if test='nickname != null'>nickname=#{nickname},</if>",
+            "    <if test='gender != null'>gender=#{gender},</if>",
+            "  </set>",
+            "where uk_email=#{ukEmail} and is_deleted = false",
+            "</script>"})
+    int updateUser(User user);
 }
