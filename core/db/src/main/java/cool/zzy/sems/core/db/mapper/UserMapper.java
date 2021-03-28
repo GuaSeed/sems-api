@@ -16,6 +16,7 @@ public interface UserMapper {
      * @return {@link User}
      */
     @Results({
+            @Result(property = "delete", column = "is_deleted"),
             @Result(property = "ukEmail", column = "uk_email"),
             @Result(property = "passwordHash", column = "password_hash"),
     })
@@ -31,7 +32,7 @@ public interface UserMapper {
             "where id = #{id}\n" +
             "  and is_deleted = false\n" +
             "limit 1")
-    User selectUserById(int id);
+    User selectById(int id);
 
 
     /**
@@ -41,6 +42,7 @@ public interface UserMapper {
      * @return {@link User}
      */
     @Results({
+            @Result(property = "delete", column = "is_deleted"),
             @Result(property = "ukEmail", column = "uk_email"),
             @Result(property = "passwordHash", column = "password_hash"),
     })
@@ -56,7 +58,7 @@ public interface UserMapper {
             "where uk_email = #{email}\n" +
             "  and is_deleted = false\n" +
             "limit 1")
-    User selectUserByEmail(String email);
+    User selectByEmail(String email);
 
     /**
      * 插入一条记录到用户表
@@ -68,7 +70,7 @@ public interface UserMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     @Insert("insert into t_user(created, uk_email, password_hash, nickname, gender, ip)\n" +
             "values (to_timestamp(#{created}), #{ukEmail}, #{passwordHash}, #{nickname}, #{gender}, #{ip}::inet)")
-    int insertUser(User user) throws Exception;
+    int insert(User user) throws Exception;
 
     /**
      * 更新用户信息
@@ -85,5 +87,5 @@ public interface UserMapper {
             "  </set>",
             "where uk_email=#{ukEmail} and is_deleted = false",
             "</script>"})
-    int updateUser(User user);
+    int update(User user);
 }

@@ -18,9 +18,10 @@ public class Delivery implements Serializable {
     private Long modified;
     private Boolean delete;
     private Integer userId;
-    private Integer postId;
-    private Integer deliveryId;
+    private String postId;
+    private Integer deliveryCompanyId;
     private String remark;
     private Boolean complete;
     private String locationName;
+    private String phone;
 }

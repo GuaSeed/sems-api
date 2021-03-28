@@ -39,3 +39,4 @@ out/
 ### Local ###
 /logs/
 *.log
+.env

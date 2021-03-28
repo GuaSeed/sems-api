@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         // 从数据库中查询是否存在该账户
-        user = userMapper.selectUserByEmail(email);
+        user = userMapper.selectByEmail(email);
         if (user == null) {
             return null;
         }
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
             user.setGender(true);
         }
         try {
-            if (userMapper.insertUser(user) > 0) {
+            if (userMapper.insert(user) > 0) {
                 // 已经注册好用户，去除密码中的随机盐
                 user.setPasswordHash(HashUtils.removeSalt(user.getPasswordHash()));
                 // 缓存到redis
@@ -108,8 +108,8 @@ public class UserServiceImpl implements UserService {
         redisTemplate.delete(globalConfig.getRedisSignInUserPrefix() + user.getUkEmail());
         user.setModified(System.currentTimeMillis() / TimeUnit.SECONDS.toMillis(1));
         try {
-            if (userMapper.updateUser(user) > 0) {
-                user = userMapper.selectUserByEmail(user.getUkEmail());
+            if (userMapper.update(user) > 0) {
+                user = userMapper.selectByEmail(user.getUkEmail());
                 if (user == null) {
                     return null;
                 }

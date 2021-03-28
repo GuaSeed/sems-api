@@ -18,5 +18,6 @@ public class Logistics implements Serializable {
     private Long modified;
     private Boolean delete;
     private Integer deliveryId;
+    private Integer userId;
     private String currentLocation;
 }
