@@ -36,4 +36,12 @@ public interface UserService {
      * @return {@link User}
      */
     User updateUser(User user);
+
+    /**
+     * 退出用户
+     *
+     * @param email 用户邮箱
+     * @return true
+     */
+    boolean logout(String email);
 }

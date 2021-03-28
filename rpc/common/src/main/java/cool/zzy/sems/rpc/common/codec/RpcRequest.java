@@ -1,6 +1,7 @@
 package cool.zzy.sems.rpc.common.codec;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * @author intent zzy.main@gmail.com
@@ -67,5 +68,17 @@ public class RpcRequest implements Serializable {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @Override
+    public String toString() {
+        return "RpcRequest{" +
+                "requestId='" + requestId + '\'' +
+                ", className='" + className + '\'' +
+                ", methodName='" + methodName + '\'' +
+                ", parameterTypes=" + Arrays.toString(parameterTypes) +
+                ", parameters=" + Arrays.toString(parameters) +
+                ", version=" + version +
+                '}';
     }
 }

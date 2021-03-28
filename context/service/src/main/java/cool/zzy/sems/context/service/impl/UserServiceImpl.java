@@ -125,4 +125,9 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+    @Override
+    public boolean logout(String email) {
+        return redisTemplate.delete(globalConfig.getRedisSignInUserPrefix() + email);
+    }
 }
